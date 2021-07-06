@@ -18,28 +18,27 @@ export default class NewBill {
   handleChangeFile = e => {
     let file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     let filePath = e.target.value.split(/\\/g)
-    let fileName = filePath[filePath.length-1]
-    // on récupère l'extension et on regarde si le format est le bon
+    let fileName = filePath[filePath.length - 1]
+    // control expected format
     let extension = fileName.substring(fileName.lastIndexOf('.') + 1)
-    if(extension.includes("jpg") | extension.includes("jpeg") | extension.includes("png")){
+    if (extension.includes("jpg") | extension.includes("jpeg") | extension.includes("png")) {
       this.firestore
-      .storage
-      .ref(`justificatifs/${fileName}`)
-      .put(file)
-      .then(snapshot => snapshot.ref.getDownloadURL())
-      .then(url => {
-        this.fileUrl = url
-        this.fileName = fileName
-      })
+        .storage
+        .ref(`justificatifs/${fileName}`)
+        .put(file)
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+          this.fileUrl = url
+          this.fileName = fileName
+        })
     }
-    else{
+    else {
       e.preventDefault()
-      file = ""
-      filePath = ""
-      fileName = ""
+      this.document.querySelector(`input[data-testid="file"]`).value = ""
       alert("Le format du justificatif n'est pas supporté, veuillez importer une image au format jpg, jpeg ou png")
     }
   }
+
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
@@ -47,12 +46,13 @@ export default class NewBill {
     const bill = {
       email,
       type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
-      name:  e.target.querySelector(`input[data-testid="expense-name"]`).value,
+      name: e.target.querySelector(`input[data-testid="expense-name"]`).value,
       amount: parseInt(e.target.querySelector(`input[data-testid="amount"]`).value),
-      date:  e.target.querySelector(`input[data-testid="datepicker"]`).value,
+      date: e.target.querySelector(`input[data-testid="datepicker"]`).value,
       vat: e.target.querySelector(`input[data-testid="vat"]`).value,
       pct: parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) || 20,
       commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
+      // a voir si il faut rendre la soumission d'un justificatif obligatoire
       fileUrl: this.fileUrl,
       fileName: this.fileName,
       status: 'pending'
@@ -65,12 +65,12 @@ export default class NewBill {
   createBill = (bill) => {
     if (this.firestore) {
       this.firestore
-      .bills()
-      .add(bill)
-      .then(() => {
-        this.onNavigate(ROUTES_PATH['Bills'])
-      })
-      .catch(error => error)
+        .bills()
+        .add(bill)
+        .then(() => {
+          this.onNavigate(ROUTES_PATH['Bills'])
+        })
+        .catch(error => error)
     }
   }
 }
