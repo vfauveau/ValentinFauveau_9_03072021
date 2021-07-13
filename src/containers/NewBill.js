@@ -19,9 +19,8 @@ export default class NewBill {
     let file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     let filePath = e.target.value.split(/\\/g)
     let fileName = filePath[filePath.length - 1]
-    // control expected format
     let extension = fileName.substring(fileName.lastIndexOf('.') + 1)
-    if (extension.includes("jpg") | extension.includes("jpeg") | extension.includes("png")) {
+    if (extension.includes("jpg") || extension.includes("jpeg") || extension.includes("png")) {
       this.firestore
         .storage
         .ref(`justificatifs/${fileName}`)

@@ -1,6 +1,6 @@
 export const formatDate = (dateStr) => {
   const date = new Date(dateStr)
-  const ye = new Intl.DateTimeFormat('fr', { year: "4-digit" }).format(date)
+  const ye = new Intl.DateTimeFormat('fr', { year: "numeric" }).format(date)
   const mo = new Intl.DateTimeFormat('fr', { month: 'short' }).format(date)
   const da = new Intl.DateTimeFormat('fr', { day: '2-digit' }).format(date)
   const month = mo.charAt(0).toUpperCase() + mo.slice(1)

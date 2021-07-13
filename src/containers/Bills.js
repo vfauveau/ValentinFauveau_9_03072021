@@ -41,7 +41,7 @@ export default class {
               try {
                 return {
                   ...doc.data(),
-                  date: formatDate(doc.data().date),
+                  date: (doc.data().date),
                   status: formatStatus(doc.data().status)
                 }
               } catch (e) {
@@ -60,6 +60,11 @@ export default class {
             bills.sort(function(a,b){
               return new Date(b.date) - new Date(a.date)
             })
+            const billsSorted = bills.map(el=>formatDate(el.date))
+            let i = 0
+            for(let cur of bills){
+              cur.date = billsSorted[i++]
+            }
             return bills
         })
         .catch(error => error)
