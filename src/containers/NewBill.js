@@ -51,7 +51,6 @@ export default class NewBill {
       vat: e.target.querySelector(`input[data-testid="vat"]`).value,
       pct: parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) || 20,
       commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
-      // a voir si il faut rendre la soumission d'un justificatif obligatoire
       fileUrl: this.fileUrl,
       fileName: this.fileName,
       status: 'pending'

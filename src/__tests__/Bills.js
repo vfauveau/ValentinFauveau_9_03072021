@@ -1,12 +1,10 @@
-import { screen } from "@testing-library/dom"
+import { getByTestId, screen } from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
 import '@testing-library/jest-dom/extend-expect'
 import firebase from "../__mocks__/firebase"
 import VerticalLayout from "../views/VerticalLayout.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
-
-
 
 
 describe("Given I am connected as an employee", () => {
@@ -23,14 +21,26 @@ describe("Given I am connected as an employee", () => {
       icon1.classList.add("active-icon")
       expect(icon1).toHaveClass("active-icon")
     })
-
+    test("If the page is loading then it should show a loading message", () => {
+      const loading = true
+      const html = BillsUI({loading})
+      document.body.innerHTML = html
+      expect(screen.getAllByText('Loading...')).toBeTruthy()
+    })
     test("Then bills should be ordered from earliest to latest", () => {
       const html = BillsUI({ data: bills })
       document.body.innerHTML = html
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
       const antiChrono = (a, b) => ((a < b) ? 1 : -1)
-      const datesSorted = dates.sort(antiChrono) // résolution du pb = changer la fonction de test du départ [...dates]
+      const datesSorted = dates.sort(antiChrono)
       expect(dates).toEqual(datesSorted)
+    })
+    test("When i click on the newBill Button then it should call handleClickNewBill function", () => {
+      const html = BillsUI({data : bills})
+      document.body.innerHTML = html
+      const newBillBtn = document.querySelector(`button[data-testid="btn-new-bill"]`)
+      $(newBillBtn).trigger("click")
+      expect(handleClickNewBill()).toHaveBeenCalled
     })
 
     // test Get bills
@@ -58,5 +68,6 @@ describe("Given I am connected as an employee", () => {
       const message = await screen.getByText(/Erreur 500/)
       expect(message).toBeTruthy()
     })
+
   })
 })

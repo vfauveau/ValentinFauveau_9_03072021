@@ -5,9 +5,10 @@ import NewBill from "../containers/NewBill.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
-    test("Then i ...", () => {
+    test("Then  ...", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
+      const select = document.querySelector(".form-control")
     })
   })
 })
