@@ -5,6 +5,9 @@ import '@testing-library/jest-dom/extend-expect'
 import firebase from "../__mocks__/firebase"
 import VerticalLayout from "../views/VerticalLayout.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
+import constructor2 from "../containers/Bills.js"
+import { ROUTES } from "../constants/routes"
+
 
 
 describe("Given I am connected as an employee", () => {
@@ -23,7 +26,7 @@ describe("Given I am connected as an employee", () => {
     })
     test("If the page is loading then it should show a loading message", () => {
       const loading = true
-      const html = BillsUI({loading})
+      const html = BillsUI({ loading })
       document.body.innerHTML = html
       expect(screen.getAllByText('Loading...')).toBeTruthy()
     })
@@ -35,12 +38,47 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = dates.sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
-    test("When i click on the newBill Button then it should call handleClickNewBill function", () => {
-      const html = BillsUI({data : bills})
+    test("When i click on the newBill Button then it should call handleClickNewBill function",  () => {
+      const html = BillsUI({ data: bills })
       document.body.innerHTML = html
-      const newBillBtn = document.querySelector(`button[data-testid="btn-new-bill"]`)
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const firestore = null
+
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+      const billsawe = new constructor2({ document, onNavigate, firestore, localStorage })
+
+      const handleClickNewBill = jest.fn((e) => billsawe.handleClickNewBill(e))
+
+      const newBillBtn = screen.getByTestId('btn-new-bill')
+
+      newBillBtn.addEventListener('click', handleClickNewBill)
       $(newBillBtn).trigger("click")
-      expect(handleClickNewBill()).toHaveBeenCalled
+      expect(handleClickNewBill).toHaveBeenCalled()
+    })
+    // PAS FINI
+    test("When i click on one eyeIcon then it should call handleClickIconEye function", async() => {
+      const html = BillsUI({ data: bills })
+      document.body.innerHTML = html
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const firestore = null
+
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      const letest = new constructor2({ document, onNavigate, firestore, localStorage })
+      const handleClickIconEye = jest.fn((e) => letest.handleClickIconEye(e))
+
+      const iconEye = screen.getAllByTestId('icon-eye')
+      if (iconEye) iconEye.forEach(icon => {
+        icon.addEventListener('click', (e) => handleClickIconEye(icon))
+      })
+
+      
     })
 
     // test Get bills

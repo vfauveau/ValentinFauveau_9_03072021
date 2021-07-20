@@ -30,7 +30,6 @@ export default class Login {
     this.PREVIOUS_LOCATION = ROUTES_PATH['Bills']
     PREVIOUS_LOCATION = this.PREVIOUS_LOCATION
     this.document.body.style.backgroundColor="#fff"
-    console.log(user)
   }
 
   handleSubmitAdmin = e => {
