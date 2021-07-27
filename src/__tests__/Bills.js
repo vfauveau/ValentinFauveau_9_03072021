@@ -8,6 +8,9 @@ import { localStorageMock } from "../__mocks__/localStorage.js"
 import Bills from "../containers/Bills.js"
 import { ROUTES } from "../constants/routes"
 
+// ligne qui permet d'utilser la methode .modal de Bootstrap avec jest
+$.fn.modal = jest.fn();
+
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", () => {
@@ -37,7 +40,6 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
     test("When i click on the newBill Button then it should call handleClickNewBill function",  () => {
-      
       const html = BillsUI({ data: bills })
       document.body.innerHTML = html
 
@@ -62,7 +64,6 @@ describe("Given I am connected as an employee", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      
       const firestore = null
       const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
       const test = new Bills({ document, onNavigate, firestore, localStorage })
