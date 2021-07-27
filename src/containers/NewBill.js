@@ -19,24 +19,16 @@ export default class NewBill {
     let file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     let filePath = e.target.value.split(/\\/g)
     let fileName = filePath[filePath.length - 1]
-    let extension = fileName.substring(fileName.lastIndexOf('.') + 1)
-    if (extension.includes("jpg") || extension.includes("jpeg") || extension.includes("png")) {
-      this.firestore
-        .storage
-        .ref(`justificatifs/${fileName}`)
-        .put(file)
-        .then(snapshot => snapshot.ref.getDownloadURL())
-        .then(url => {
-          this.fileUrl = url
-          this.fileName = fileName
-        })
+    this.firestore
+      .storage
+      .ref(`justificatifs/${fileName}`)
+      .put(file)
+      .then(snapshot => snapshot.ref.getDownloadURL())
+      .then(url => {
+        this.fileUrl = url
+        this.fileName = fileName
+      })
     }
-    else {
-      e.preventDefault()
-      this.document.querySelector(`input[data-testid="file"]`).value = ""
-      alert("Le format du justificatif n'est pas supporté, veuillez importer une image au format jpg, jpeg ou png")
-    }
-  }
 
   handleSubmit = e => {
     e.preventDefault()

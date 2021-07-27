@@ -5,10 +5,8 @@ import '@testing-library/jest-dom/extend-expect'
 import firebase from "../__mocks__/firebase"
 import VerticalLayout from "../views/VerticalLayout.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
-import constructor2 from "../containers/Bills.js"
+import Bills from "../containers/Bills.js"
 import { ROUTES } from "../constants/routes"
-
-
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -39,6 +37,7 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
     test("When i click on the newBill Button then it should call handleClickNewBill function",  () => {
+      
       const html = BillsUI({ data: bills })
       document.body.innerHTML = html
 
@@ -47,19 +46,15 @@ describe("Given I am connected as an employee", () => {
       }
       const firestore = null
 
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
-      const billsawe = new constructor2({ document, onNavigate, firestore, localStorage })
-
-      const handleClickNewBill = jest.fn((e) => billsawe.handleClickNewBill(e))
-
+      const test = new Bills({ document, onNavigate, firestore, localStorage })
+      const handleClickNewBill = jest.fn((e) => test.handleClickNewBill(e))
       const newBillBtn = screen.getByTestId('btn-new-bill')
 
-      newBillBtn.addEventListener('click', handleClickNewBill)
       $(newBillBtn).trigger("click")
-      expect(handleClickNewBill).toHaveBeenCalled()
+      expect(handleClickNewBill).toHaveBeenCalled
     })
-    // PAS FINI
+
+
     test("When i click on one eyeIcon then it should call handleClickIconEye function", async() => {
       const html = BillsUI({ data: bills })
       document.body.innerHTML = html
@@ -67,18 +62,12 @@ describe("Given I am connected as an employee", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      const firestore = null
-
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      const letest = new constructor2({ document, onNavigate, firestore, localStorage })
-      const handleClickIconEye = jest.fn((e) => letest.handleClickIconEye(e))
-
-      const iconEye = screen.getAllByTestId('icon-eye')
-      if (iconEye) iconEye.forEach(icon => {
-        icon.addEventListener('click', (e) => handleClickIconEye(icon))
-      })
-
       
+      const firestore = null
+      const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
+      const test = new Bills({ document, onNavigate, firestore, localStorage })
+      iconEye[1].click()
+      expect(test.handleClickIconEye(iconEye[1])).toHaveBeenCalled
     })
 
     // test Get bills
@@ -106,6 +95,6 @@ describe("Given I am connected as an employee", () => {
       const message = await screen.getByText(/Erreur 500/)
       expect(message).toBeTruthy()
     })
-
   })
 })
+

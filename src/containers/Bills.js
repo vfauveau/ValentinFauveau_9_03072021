@@ -56,16 +56,16 @@ export default class {
               }
             })
             .filter(bill => bill.email === userEmail)
-            console.log('length', bills.length)
-            bills.sort(function(a,b){
-              return new Date(b.date) - new Date(a.date)
-            })
-            const billsSorted = bills.map(el=>formatDate(el.date))
-            let i = 0
-            for(let cur of bills){
-              cur.date = billsSorted[i++]
-            }
-            return bills
+          console.log('length', bills.length)
+          bills.sort(function (a, b) {
+            return new Date(b.date) - new Date(a.date)
+          })
+          const billsSorted = bills.map(el => formatDate(el.date))
+          let i = 0
+          for (let cur of bills) {
+            cur.date = billsSorted[i++]
+          }
+          return bills
         })
         .catch(error => error)
     }
