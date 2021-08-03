@@ -2,25 +2,15 @@ import { screen } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import { ROUTES, ROUTES_PATH } from "../constants/routes"
+import { Router } from "express";
 import firebase from "../__mocks__/firebase"
 import BillsUI from "../views/BillsUI.js"
-import firestore from "../__mocks__/firestore.js"
-import Router from "../app/Router.js"
-// mock des alertes
-var bills
+import Firestore from "../app/Firestore.js"
+import { bills } from "../fixtures/bills.js";
+
 window.alert = jest.fn();
-async function getBills () {
-  bills = await firebase.get()
-  return bills
-}
-getBills()
-// mock firestore
-jest.mock("firestore")
-firestore.bills = () => ({bills})
-window.localStorage.setItem('user', JSON.stringify({
-  type:"Employee",
-}))
-Object.defineProperty(window, 'location' , {value: {hash: ROUTES_PATH['NewBill'] } })
+
+
 
 // pb avec la gestion des "e" des fonctions mockées
 describe("Given I am connected as an employee", () => {
@@ -38,6 +28,7 @@ describe("Given I am connected as an employee", () => {
         status: "connected"
       }
       window.localStorage.setItem("user", JSON.stringify(user))
+      const firestore = null
       const mockBill = new NewBill({ document, onNavigate, firestore, localStorage })
       const formNewBill = document.querySelector(`form[data-testid="form-new-bill"]`)
       const inp = document.querySelector(`form[data-testid="form-new-bill"]`)
@@ -54,14 +45,16 @@ describe("Given I am connected as an employee", () => {
         const onNavigate = (pathname) => {
           document.body.innerHTML = ROUTES({ pathname })
         }
+        const firestore = null
         const mockBill = new NewBill({ document, onNavigate, firestore, localStorage })
         const file = document.querySelector(`input[data-testid="file"]`)
         const handleChangeFile = jest.fn ((e={target:file}) => mockBill.handleChangeFile(e))
         file.addEventListener("click", handleChangeFile)
         $(file).trigger("click", handleChangeFile)
-        expect(file.value).toBe("")
         expect(handleChangeFile).toHaveBeenCalledTimes(1)
     })
+
+
     // test post
     test("fetches bills from mock API POST", async () => {
       const getSpy = jest.spyOn(firebase, "post")

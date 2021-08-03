@@ -16,9 +16,11 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
+
     let file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     let filePath = e.target.value.split(/\\/g)
     let fileName = filePath[filePath.length - 1]
+    if (this.firestore) {
       this.firestore
         .storage
         .ref(`justificatifs/${fileName}`)
@@ -28,6 +30,7 @@ export default class NewBill {
           this.fileUrl = url
           this.fileName = fileName
         })
+    }
   }
 
   handleSubmit = e => {
