@@ -8,11 +8,7 @@ import BillsUI from "../views/BillsUI.js"
 import Firestore from "../app/Firestore.js"
 import { bills } from "../fixtures/bills.js";
 
-window.alert = jest.fn();
 
-
-
-// pb avec la gestion des "e" des fonctions mockées
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
     test("Then when i click the submit button , the submit shoud be handled", () => {
